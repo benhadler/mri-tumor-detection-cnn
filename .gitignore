@@ -1,0 +1,15 @@
+data/
+*.zip
+models/*
+!models/best_model.pt
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.conda/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
