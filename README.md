@@ -2,27 +2,27 @@
 
 ## Abstract
 
-This project independently reimplemented the model described in Lightweight CNN for Accurate Brain Tumor Detection from MRI with Limited Training Data by Naeem et al. A dataset of 189 MRI images was constructed from the Kaggle repository cited by the authors and divided into stratified training, validation, and test sets. The reported model architecture, data augmentation procedures, training configuration, and evaluation methods were reproduced in PyTorch. The model checkpoint with the lowest validation loss (0.434) achieved a validation accuracy of 78.6% and ROC-AUC of 0.857, while test performance reached 85.7% accuracy and a ROC-AUC of 0.878. Results were compared with those reported in the original study, and potential areas for improving the replication were examined, including dataset quality and composition, stochastic variation, implementation differences across deep-learning frameworks, and discriminating ambiguities in the published methodology.
+This project independently reimplemented the model described in *Lightweight CNN for Accurate Brain Tumor Detection from MRI with Limited Training Data* by Naeem et al. A dataset of 189 MRI images was constructed from the Kaggle repository listed by the authors and divided into stratified training, validation, and test sets. The reported model architecture, data augmentation procedures, training configuration, and evaluation methods were reproduced in PyTorch. The model checkpoint with the lowest validation loss (0.434) achieved a validation accuracy of 78.6% and ROC-AUC of 0.857, while test performance reached 85.7% accuracy and a ROC-AUC of 0.878. Results were compared with those reported in the original study, and areas of difficulty for conducting the replication were examined, including dataset quality and composition, stochastic variation, implementation differences across deep-learning frameworks, and discriminating ambiguities in the published methodology.
 
 ## Introduction
 
-The Authors aimed to create an effective computer-assisted diagnostic model for the real-time identification of brain tumors in MRI images using limited data and computational resources. Data-augmentation techniques including horizontal flipping, rotation, zoom, translation, noise injection, and brightness adjustment were applied stochastically during each epoch using TensorFlow's `ImageDataGenerator` class. As in our reimplementation, the training, validation, and test splits were stratified to maintain a balance between cancerous (tumor-positive) and non-cancerous (tumor-negative) cases. The architecture comprised three convolutional layers, each followed by a max-pooling layer, as well as a fully connected hidden layer, a dropout layer, and a fully connected output layer. The architecture was implemented using the TensorFlow Layers API.
+The Authors aimed to create a computer-assisted diagnostic model for the real-time identification of brain tumors in MRI images using limited data and computational resources. Data-augmentation techniques including horizontal flipping, rotation, zoom, translation, noise injection, and brightness adjustment were applied stochastically during each epoch using TensorFlow's `ImageDataGenerator` class. As in our reimplementation, the training, validation, and test splits were stratified to maintain a balance between cancerous (tumor-positive) and non-cancerous (tumor-negative) cases. The architecture comprised three convolutional layers, each followed by a max-pooling layer, as well as a fully connected hidden layer, a dropout layer, and a fully connected output layer.
 
 ![Architecture of the reimplemented convolutional neural network](figures/model_architecture.png)
 
 *Figure 1. Architecture of the reimplemented CNN. Three convolutional blocks extract image features before a fully connected layer, dropout layer, and sigmoid output produce the tumor-class probability.*
 
-## Implementation
+## Reimplementation
 
 ### Data Preprocessing
 
 The MRI images used in this implementation were downloaded from the [Kaggle repository linked in the original article](https://www.kaggle.com/datasets/navoneel/brain-mri-images-for-brain-tumor-detection/data). The dataset contained 155 tumor-positive images and 98 tumor-negative images, which did not match the 95 tumor-positive and 94 tumor-negative images described in the paper. To construct a dataset similar to the one used in the original study, I used Python's `random` library to sample 95 tumor-positive images and 94 tumor-negative images from their respective folders. I then shuffled the images to eliminate any effects of their original ordering before dividing them into training, validation, and test sets.
 
-Using PyTorch's `transforms` module, I reproduced all of the listed data-augmentation techniques except Gaussian noise, which required a custom transformation. The data loaders used a batch size of 18, matching the batch size reported in the original paper.
+Using PyTorch's `transforms` module, I was able to implment all of the listed data-augmentation techniques mentioned by the authors. The data loaders used a batch size of 18, matching the batch size reported in the original paper.
 
 ### Model Creation
 
-I reimplemented the CNN architecture using PyTorch's `nn.Module` class. The network contained three convolutional layers, each followed by a ReLU activation function and a max-pooling layer. The resulting feature maps were then flattened and passed through a fully connected layer with a ReLU activation. A dropout layer randomly set half of the activations to zero before the output was passed through a final fully connected layer with a sigmoid activation function.
+I reimplemented the CNN architecture using PyTorch's `nn.Module` class. The network contained three convolutional layers, each followed by a ReLU activation function and a max-pooling layer. The layer was then flattened and passed through a fully connected layer with a ReLU activation. A dropout layer randomly set half of the activations to zero before the output was passed through a final fully connected layer with a sigmoid activation function.
 
 ### Model Training
 
